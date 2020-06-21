@@ -1,0 +1,16 @@
+html(lang="fr")
+    head
+        meta(charset="UTF-8")
+        title Login
+    body
+        if flash && flash.error
+            p #{flash.error}
+            
+        form(action="/login", method="post")
+            label(for="usernameInput") Username :
+            input(type="text", name="username", id="usernameInput")
+
+            label(for="passwordInput") Password :
+            input(type="password", name="password", id="passwordInput")
+
+            button(type="submit") Sign In

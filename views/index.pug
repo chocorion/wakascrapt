@@ -1,0 +1,32 @@
+html(lang="fr")
+    head
+        meta(charset="UTF-8")
+        title Wakascrapt
+        script(src="https://unpkg.com/axios/dist/axios.min.js")
+        link(rel="stylesheet", href="style.css")
+    body
+
+    h1 Welcome #{username} !
+
+    if token === undefined
+        div
+            p You need to connect your wakatime accout.
+            a(href="/oauth/redirect") Click here !
+
+    else
+        #loader
+            p Updating data...
+            .lds-ripple
+                div
+                div
+
+        script.
+            axios.post('/update')
+            .then(response => {
+                console.log("Success !");
+                document.getElementById('loader').remove();
+            })
+            .catch(error => {
+                console.log("Error while updating data : " + error);
+                document.getElementById('loader').remove();
+            })

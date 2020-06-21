@@ -1,0 +1,5 @@
+apiKey.txt
+*.json
+__pycache__/
+node_modules
+secret.js
