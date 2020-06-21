@@ -14,13 +14,14 @@ class dbManager {
         });
     }
 
+
     addUser(username, password) {
         const query = `INSERT INTO users (name, password) VALUES("${username}", "${password}")`;
         
         return new Promise((resolve, reject) => {
             this.connection.query(
                 query,
-                (error, result, fields) => {
+                (error, result) => {
                     if (error) {
                         reject(error);
                     } else {
@@ -31,13 +32,14 @@ class dbManager {
         });
     }
 
+
     getUser(username, password) {
         const query = `SELECT id FROM users WHERE name="${username}" AND password="${password}"`;
 
         return new Promise((resolve, reject) => {
             this.connection.query(
                 query,
-                (error, result, fields) => {
+                (error, result) => {
                     if (error) reject(error);                
                     
                     if (!result.length) {
@@ -50,24 +52,57 @@ class dbManager {
         });
     }
 
+
     getLastUpdate(userId) {
         const query = `SELECT lastUpdate FROM users WHERE id=${userId}`;
         
         return new Promise((resolve, reject) => {
             this.connection.query(
                 query,
-                (error, result, fields) => {
-                    if (error) console.error("Error in getLastUpdate -> " + error);
-    
-                    if (!result.length) {
-                        reject("Invalid user id")
-                    } else {
-                        resolve(result);
-                    }
+                (error, result) => {
+                    if (error) reject(error);
+                    else resolve(result);
                 }
             );
         });
     }
+
+    setLastUpdate(userId, date) {
+        const query = `UPDATE users SET lastUpdate = '${date}' WHERE id=${userId}`;
+
+        return new Promise ((resolve, reject) => {
+            this.connection.query(
+                query,
+                (error, result) => {
+                    if (error) reject(error);
+                    else resolve(result);
+                }
+            );
+        });
+    }
+
+
+    insertSummarie(userId, date, data, lastUpdate) {
+        let query;
+ 
+        if (date == lastUpdate) {
+            query = `UPDATE userData SET data = '${JSON.stringify(data)}' WHERE userId=${userId} AND date='${date}'`;    
+        } else {
+            query = `INSERT INTO userData (userId, date, data) VALUES(${userId}, '${date}', '${JSON.stringify(data)}')`;
+        }
+        
+        return new Promise((resolve, reject) => {
+            this.connection.query(
+                query,
+                (error, result) => {
+                    if (error) reject(error);
+                    else resolve(result);
+                }
+            );
+        });
+    }
+
+
 
     end() {
         this.connection.end();

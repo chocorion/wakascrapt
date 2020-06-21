@@ -40,20 +40,32 @@ function parseSummarie(data) {
     return userData;
 }
 
-// TODO : Stocker les infos dans bdd: Id | Date | Data. Penser à mettre à jour lastUpdate dans BDD && cookie.
+
+function insertSummaries(userId, summaries, lastUpdate) {
+    for (const date in summaries) {
+        db.insertSummarie(userId, date, summaries[date], lastUpdate)
+            .catch(error => {
+                console.error("Error in insertSummaries -> " + error);
+            });
+    }
+}
+
 
 module.exports = async function update(userId, token) {
     let lastUpdate;
 
     await db.getLastUpdate(userId).then(result => {
         lastUpdate = result[0].lastUpdate;
+
+        if (lastUpdate != null) {
+            let m = lastUpdate.getMonth() + 1;
+            let d = lastUpdate.getDate();
+            lastUpdate = `${lastUpdate.getFullYear()}-${m<10?'0'+m:m}-${d<10?'0'+d:d}`
+        }
     }) .catch(err => {
         throw err;
     });
-    
-    console.log(`Last update for userId ${userId} -> ${lastUpdate}`);
 
-    
     let startTime = lastUpdate;
     
     if (startTime == null) {
@@ -66,8 +78,6 @@ module.exports = async function update(userId, token) {
     let endTime = (new Date()).toISOString().split('T')[0];
 
 
-    console.log(`Start -> ${startTime}, to End -> ${endTime}`);
-
     const baseUrl = 'https://wakatime.com/api/v1/users/current/';
     let summarieUrl = baseUrl + `summaries?start=${startTime}&end=${endTime}`
 
@@ -77,11 +87,11 @@ module.exports = async function update(userId, token) {
                 'Authorization': `Bearer ${token}`
             }
         }).then(response => {
-            console.log("Response from wakatime update !")
-
             const result = parseSummarie(response.data);
-            console.log(JSON.stringify(result, null, 4));
            
+            insertSummaries(userId, result, lastUpdate);
+            db.setLastUpdate(userId, endTime)
+                .catch(error => console.error("Error in setLastUpdate -> " + error));
 
             resolve();
         }).catch(error => {

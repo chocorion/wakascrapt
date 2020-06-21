@@ -17,7 +17,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 app.use(session({
     name: 'session',
-    keys: ['myCookieSecretKeyThatYouDontKnow']
+    keys: [require('./secret').cookie]
 }));
 
 app.use(require('./middlewares/flash'));
