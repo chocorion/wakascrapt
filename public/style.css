@@ -46,8 +46,6 @@
     top: 0;
     right: 0;
     left: 0;
-    
-
 }
 
 #canvasContainer {
@@ -60,7 +58,19 @@
     align-items: center;
 }
 
-#canvasContainer div {
-    width: 80%;
-    height: 80%;
+#codingActivityContainer {
+    width: 50%;
+    height: 50%;
+}
+
+#languagesContainer {
+    width: 40%;
+    height: 40%;
+}
+
+/* This little trick solve charJs problems with flex on responsivity.
+*/
+canvas {
+    width: 100% !important;
+    height: 100% !important;
 }
