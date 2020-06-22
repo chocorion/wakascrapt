@@ -1,9 +1,14 @@
 function drawDailyActivity(data) {
     // console.log(JSON.stringify(data, null, 4));
-    let ctx = document.getElementById('myChart').getContext('2d');
+    let ctx = document.getElementById('codingActivityChart').getContext('2d');
+
     let dailyTimes = [];
+    let labels = [];
     
     for (const day in data) {
+        let str = new Date(day).toDateString();
+        labels.push(str.substring(0, str.lastIndexOf(" ")));
+        
         let currentTime = JSON.parse(data[day]).totalTime;
 
         if (currentTime === null) {
@@ -16,12 +21,12 @@ function drawDailyActivity(data) {
     }
 
 
-    var myChart = new Chart(ctx, {
+    let codingActivity = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: Object.keys(data),
+            labels: labels,
             datasets: [{
-                label: '# of Votes',
+                label: 'Coding activity',
                 data: dailyTimes,
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
@@ -50,7 +55,8 @@ function drawDailyActivity(data) {
                     }
                 }]
             },
-            responsive: false
+            responsive: true,
+            maintainAspectRatio: false
         }
     });
 }

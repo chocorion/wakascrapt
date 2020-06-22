@@ -20,10 +20,15 @@ html(lang="fr")
             .lds-ripple
                 div
                 div
-
-        canvas(id="myChart" width="400" height="400")
+        #container
+            #canvasContainer
+                div
+                    canvas(id="codingActivityChart")
+                div
+                    canvas(id="languagesChart")
 
         script(src="/drawDailyActivity.js")
+        script(src="/drawLanguages.js")
         script.
             function getSummaries(offset) {
                 let start = new Date();
@@ -48,6 +53,7 @@ html(lang="fr")
                 })
                 .then(result => {
                     drawDailyActivity(result.data);
+                    drawLanguages(result.data);
                 })
                 .catch(error => {
                     console.log("Error while updating data : " + error);
