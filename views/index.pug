@@ -3,6 +3,7 @@ html(lang="fr")
         meta(charset="UTF-8")
         title Wakascrapt
         script(src="https://unpkg.com/axios/dist/axios.min.js")
+        script(src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.js")
         link(rel="stylesheet", href="style.css")
     body
 
@@ -20,34 +21,36 @@ html(lang="fr")
                 div
                 div
 
+        canvas(id="myChart" width="400" height="400")
+
+        script(src="/drawDailyActivity.js")
         script.
             function getSummaries(offset) {
                 let start = new Date();
                 let end = new Date();
 
-                start.setDate(start.getDate() - offset);
+                // TODO : Find why -1
+                start.setDate(start.getDate() - (offset - 1));
 
-                axios.post('/getSummaries', {
+                return axios.post('/getSummaries', {
                     startTime: start.toISOString().split('T')[0],
                     endTime: end.toISOString().split('T')[0]
                 })
-                .then(response => {
-                    console.log("Resonse from the server -> " + JSON.stringify(response.data, null, 4));
-                })
-                .catch(error => {
-                    console.log("Error from the server -> " + error);
-                });
             }
 
-            axios.post('/update')
-            .then(response => {
-                console.log("Success !");
-                document.getElementById('loader').remove();
 
-                getSummaries(7);
-            })
-            .catch(error => {
-                console.log("Error while updating data : " + error);
-                document.getElementById('loader').remove();
-            })
+            axios.post('/update')
+                .then(response => {
+                    console.log("Success !");
+                    document.getElementById('loader').remove();
+
+                    return getSummaries(7);
+                })
+                .then(result => {
+                    drawDailyActivity(result.data);
+                })
+                .catch(error => {
+                    console.log("Error while updating data : " + error);
+                    document.getElementById('loader').remove();
+                });
 
