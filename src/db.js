@@ -1,5 +1,13 @@
 const mysql = require('mysql');
 
+function basicDbCallback(resolve, reject) {
+    return (error, result) => {
+        if (error) reject(error);
+        else resolve(result);
+    }
+}
+ 
+
 class dbManager {
     constructor() {
         this.connection = mysql.createConnection({
@@ -14,22 +22,20 @@ class dbManager {
         });
     }
 
-
-    addUser(username, password) {
-        const query = `INSERT INTO users (name, password) VALUES("${username}", "${password}")`;
-        
+    _basicQuery(query) {
         return new Promise((resolve, reject) => {
             this.connection.query(
                 query,
-                (error, result) => {
-                    if (error) {
-                        reject(error);
-                    } else {
-                        resolve(result);
-                    }
-                }
+                basicDbCallback(resolve, reject)
             );
         });
+    }
+
+    // TODO : Use hash version for the password !
+    addUser(username, password) {
+        const query = `INSERT INTO users (name, password) VALUES("${username}", "${password}")`;
+        
+        return this._basicQuery(query);
     }
 
 
@@ -56,29 +62,13 @@ class dbManager {
     getLastUpdate(userId) {
         const query = `SELECT lastUpdate FROM users WHERE id=${userId}`;
         
-        return new Promise((resolve, reject) => {
-            this.connection.query(
-                query,
-                (error, result) => {
-                    if (error) reject(error);
-                    else resolve(result);
-                }
-            );
-        });
+        return this._basicQuery(query);
     }
 
     setLastUpdate(userId, date) {
         const query = `UPDATE users SET lastUpdate = '${date}' WHERE id=${userId}`;
 
-        return new Promise ((resolve, reject) => {
-            this.connection.query(
-                query,
-                (error, result) => {
-                    if (error) reject(error);
-                    else resolve(result);
-                }
-            );
-        });
+        return this._basicQuery(query);
     }
 
 
@@ -91,17 +81,15 @@ class dbManager {
             query = `INSERT INTO userData (userId, date, data) VALUES(${userId}, '${date}', '${JSON.stringify(data)}')`;
         }
         
-        return new Promise((resolve, reject) => {
-            this.connection.query(
-                query,
-                (error, result) => {
-                    if (error) reject(error);
-                    else resolve(result);
-                }
-            );
-        });
+        return this._basicQuery(query);
     }
 
+
+    getSummarie(userId, date) {
+        const query = `SELECT data FROM userData WHERE userId=${userId} AND date='${date}'`;
+
+        return this._basicQuery(query);
+    }
 
 
     end() {

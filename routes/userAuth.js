@@ -20,7 +20,7 @@ router.post('/join', (req, res) => {
 
     
     db.addUser(username, password)
-        .then(result => {
+        .then(() => {
             return db.getUser(username, password);
         })
         .then(result => {
@@ -31,8 +31,6 @@ router.post('/join', (req, res) => {
             res.redirect('/');
         })
         .catch(error => {
-            console.log("Error on join: " + error);
-            
             req.flash("error", error);
             res.redirect('/join');
         });
@@ -45,7 +43,6 @@ router.get('/login', (req, res) => {
         return;
     }
 
-    // Tell to pug if when redirection on bad user info
     res.render('login', {});
 });
 
@@ -62,7 +59,6 @@ router.post('/login', (req, res) => {
             res.redirect('/');
         })
         .catch(error => {
-            console.log("Error -> " + error);
             req.flash("error", error);
             res.redirect('/login');
         });

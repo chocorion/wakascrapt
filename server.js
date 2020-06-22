@@ -46,8 +46,40 @@ app.post('/update', (req, res) => {
                 res.end();
             });
     }
-
 });
+
+app.post('/getSummaries', async (req, res) => {
+    if (req.session.access_token === undefined) {
+        return res.status(400).send({
+            message: "Error, invalid access token."
+        });
+    }
+
+    const startTime = req.body.startTime;
+    const endTime = req.body.endTime;
+    
+    if (startTime === undefined || endTime === undefined) {
+        return res.status(400).send({
+            message: "Error, invalid start time or end time."
+        });
+    }
+
+    let startDate = new Date(startTime);
+    let endDate = new Date(endTime);
+
+    let data = {};
+
+    while (startDate <= endDate) {
+        const strDate = startDate.toISOString().split('T')[0];
+
+        data[strDate] = (await db.getSummarie(req.session.userId, strDate))[0].data;
+        startDate.setDate(startDate.getDate() + 1);
+    }
+
+    res.setHeader('Content-Type', 'application/json');
+    res.end(JSON.stringify(data, null, 4));
+});
+
 
 app.get('/', async (req, res) => {
     if (req.session.logged) {
