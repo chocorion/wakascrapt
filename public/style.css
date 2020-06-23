@@ -1,5 +1,6 @@
 * {
     box-sizing: border-box;
+    font-family: 'B612', sans-serif;
 }
 
 .lds-ripple {
@@ -33,6 +34,76 @@
         height: 72px;
         opacity: 0;
     }
+}
+
+.principalTitle {
+    font-style: italic;
+}
+
+#selectTime {
+    display: flex;
+    margin-left: 3%;
+
+    font-size: 1.2em;
+}
+
+#selectTime > * {
+    margin-top: 16px;
+    margin-bottom: 16px;
+}
+
+#currentDuration {
+    font-style: italic;
+    text-decoration: underline dotted;
+    color: rgb(85, 187, 236);
+}
+
+.loginBlock {
+    border-radius: 10px;
+    background-color: white;
+    box-shadow: 0 10px 20px rgb(150, 150, 150);
+    font-family: 'B612', sans-serif;
+}
+
+.loginBlock form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    margin: 20px;
+}
+
+.loginBlock form label {
+    margin: 0 auto;
+}
+
+.loginBlock form input {
+    margin: 5px;
+    text-align: center;
+}
+
+.loginBlock button {
+    background-color: rgb(85, 187, 236);
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgb(85, 187, 236);
+
+    padding: 5px 30px;
+    border: none;
+    color: white;
+
+}
+
+.error {
+    
+    
+    background-color: rgb(245, 135, 149);
+    border: solid;
+    border-width: 1px;
+    border-color: rgb(186, 60, 76);
+    margin-top: 0;
+    border-top-left-radius: inherit;
+    border-top-right-radius: inherit;
+    padding: 15px;
 }
 
 #container {

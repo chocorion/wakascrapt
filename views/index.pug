@@ -5,9 +5,15 @@ html(lang="fr")
         script(src="https://unpkg.com/axios/dist/axios.min.js")
         script(src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.js")
         link(rel="stylesheet", href="style.css")
+        link(href="https://fonts.googleapis.com/css2?family=B612:ital,wght@0,400;0,700;1,400&display=swap", rel="stylesheet")
+
     body
 
-    h1 Welcome #{username} !
+    h1.principalTitle Hello #{username} !
+    #selectTime
+        p Blabla time over the&nbsp;
+        a#currentDuration Last 7 Days
+        p .
 
     if token === undefined
         div

@@ -2,15 +2,19 @@ html(lang="fr")
     head
         meta(charset="UTF-8")
         title Login
+        link(rel="stylesheet", href="style.css")
+        link(href="https://fonts.googleapis.com/css2?family=B612:ital,wght@0,400;0,700;1,400&display=swap", rel="stylesheet")
     body
-        if flash && flash.error
-            p #{flash.error}
-            
-        form(action="/login", method="post")
-            label(for="usernameInput") Username :
-            input(type="text", name="username", id="usernameInput")
+        #container
+            div.loginBlock
+                if flash && flash.error
+                    p.error #{flash.error}
+                    
+                    
+                form(action="/login", method="post")
+                    label Sign In
+                    input(type="text", name="username", id="usernameInput", placeholder="username")
 
-            label(for="passwordInput") Password :
-            input(type="password", name="password", id="passwordInput")
+                    input(type="password", name="password", id="passwordInput", placeholder="password")
 
-            button(type="submit") Sign In
+                    button(type="submit") Sign In
