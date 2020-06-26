@@ -71,8 +71,11 @@ app.post('/getSummaries', async (req, res) => {
 
     while (startDate <= endDate) {
         const strDate = startDate.toISOString().split('T')[0];
+        const dbData = await db.getSummarie(req.session.userId, strDate);
 
-        data[strDate] = (await db.getSummarie(req.session.userId, strDate))[0].data;
+        if (dbData[0] !== undefined)
+            data[strDate] = (dbData)[0].data;
+            
         startDate.setDate(startDate.getDate() + 1);
     }
 

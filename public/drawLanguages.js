@@ -20,7 +20,7 @@ function drawLanguages(data) {
 
     console.log(JSON.stringify(languageAverage, null, 4));
 
-    let languagesDonut = new Chart(ctx, {
+    return new Chart(ctx, {
         type: 'doughnut',
         data: {
             labels: Object.keys(languageAverage),

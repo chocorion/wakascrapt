@@ -10,6 +10,17 @@ html(lang="fr")
     body
     
     script.
+        let activityChart;
+        let languageChart;
+
+        let durationStr = {
+            "7": "Last 7 days",
+            "14": "Last 14 days",
+            "31": "Last mouth",
+            "365": "Last year",
+            "-1": "All",
+        };
+
         function getSummaries(offset) {
             let start = new Date();
             let end = new Date();
@@ -26,20 +37,25 @@ html(lang="fr")
         function onDurationSelect(duration) {
             getSummaries(duration)
                 .then(result => {
-                    drawDailyActivity(result.data);
-                    drawLanguages(result.data);
+                    activityChart.destroy(); 
+                    activityChart = drawDailyActivity(result.data);
+
+                    languageChart.destroy();
+                    languageChart = drawLanguages(result.data);
                 })
                 .catch(error => {
                     console.log("Error while updating data : " + error);
                     document.getElementById('loader').remove();
                 });
+
+            document.getElementById('durationStr').textContent = durationStr[+duration];
         }
 
     h1.topTitle Hello #{username} !
     #selectTime
         p Blabla time over the&nbsp;
         div#currentDuration 
-            p Last 7 Days
+            p#durationStr Last 7 Days
             div#hiddenMenu
                 ul
                     li(onclick='onDurationSelect(7)') Last 7 days
@@ -78,8 +94,8 @@ html(lang="fr")
                     return getSummaries(7);
                 })
                 .then(result => {
-                    drawDailyActivity(result.data);
-                    drawLanguages(result.data);
+                    activityChart = drawDailyActivity(result.data);
+                    languageChart = drawLanguages(result.data);
                 })
                 .catch(error => {
                     console.log("Error while updating data : " + error);

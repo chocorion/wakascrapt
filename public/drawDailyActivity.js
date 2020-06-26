@@ -21,7 +21,7 @@ function drawDailyActivity(data) {
     }
 
 
-    let codingActivity = new Chart(ctx, {
+    return new Chart(ctx, {
         type: 'bar',
         data: {
             labels: labels,
