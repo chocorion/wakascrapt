@@ -8,12 +8,46 @@ html(lang="fr")
         link(href="https://fonts.googleapis.com/css2?family=B612:ital,wght@0,400;0,700;1,400&display=swap", rel="stylesheet")
 
     body
+    
+    script.
+        function getSummaries(offset) {
+            let start = new Date();
+            let end = new Date();
 
-    h1.principalTitle Hello #{username} !
+            // TODO : Find why -1
+            start.setDate(start.getDate() - (offset - 1));
+
+            return axios.post('/getSummaries', {
+                startTime: start.toISOString().split('T')[0],
+                endTime: end.toISOString().split('T')[0]
+            });
+        }
+
+        function onDurationSelect(duration) {
+            getSummaries(duration)
+                .then(result => {
+                    drawDailyActivity(result.data);
+                    drawLanguages(result.data);
+                })
+                .catch(error => {
+                    console.log("Error while updating data : " + error);
+                    document.getElementById('loader').remove();
+                });
+        }
+
+    h1.topTitle Hello #{username} !
     #selectTime
         p Blabla time over the&nbsp;
-        a#currentDuration Last 7 Days
-        p .
+        div#currentDuration 
+            p Last 7 Days
+            div#hiddenMenu
+                ul
+                    li(onclick='onDurationSelect(7)') Last 7 days
+                    li(onclick='onDurationSelect(14)') Last 14 days
+                    li(onclick='onDurationSelect(31)') Last mouth
+                    li(onclick='onDurationSelect(365)') Last year
+                    li(onclick='onDurationSelect(-1)') All
+                    li(onclick='alert("TODO")') Custom date
 
     if token === undefined
         div
@@ -36,20 +70,6 @@ html(lang="fr")
         script(src="/drawDailyActivity.js")
         script(src="/drawLanguages.js")
         script.
-            function getSummaries(offset) {
-                let start = new Date();
-                let end = new Date();
-
-                // TODO : Find why -1
-                start.setDate(start.getDate() - (offset - 1));
-
-                return axios.post('/getSummaries', {
-                    startTime: start.toISOString().split('T')[0],
-                    endTime: end.toISOString().split('T')[0]
-                })
-            }
-
-
             axios.post('/update')
                 .then(response => {
                     console.log("Success !");

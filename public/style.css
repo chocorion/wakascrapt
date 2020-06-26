@@ -36,7 +36,7 @@
     }
 }
 
-.principalTitle {
+.topTitle {
     font-style: italic;
 }
 
@@ -45,17 +45,54 @@
     margin-left: 3%;
 
     font-size: 1.2em;
+    z-index: 5;
 }
 
-#selectTime > * {
+#selectTime ~ * {
     margin-top: 16px;
     margin-bottom: 16px;
+}
+
+#hiddenMenu{
+    display: none;
+    text-decoration: none;
+    border-radius: 10px;
+    box-shadow: 0 10px 10px rgb(190, 190, 190);
+}
+
+#hiddenMenu > * {
+    font-style: normal;
+    text-decoration: none !important;
+    color: #000;
+    
+}
+
+#hiddenMenu ul {
+    padding: 0 10px;
+    list-style-type: none;
+}
+
+#hiddenMenu li {
+    list-style: none;
+    margin: 5px auto;
+}
+
+#hiddenMenu li:hover {
+    list-style: none;
+    margin: 5px auto;
+    text-decoration: dotted underline;
+    cursor: pointer;
 }
 
 #currentDuration {
     font-style: italic;
     text-decoration: underline dotted;
     color: rgb(85, 187, 236);
+    z-index: 5;
+}
+
+#currentDuration:hover #hiddenMenu {
+    display: inline-block;
 }
 
 .loginBlock {
@@ -117,6 +154,8 @@
     top: 0;
     right: 0;
     left: 0;
+
+    z-index: 0;
 }
 
 #canvasContainer {
@@ -127,6 +166,8 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+
+    z-index: 0;
 }
 
 #codingActivityContainer {

@@ -48,7 +48,10 @@ function drawLanguages(data) {
         },
         options: {
             responsive: true,
-            maintainAspectRatio: false
+            maintainAspectRatio: false,
+            legend: {
+                position: 'right'
+            }
         }
     })
 }
